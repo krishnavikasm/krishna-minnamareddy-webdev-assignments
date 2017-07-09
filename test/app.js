@@ -6,6 +6,8 @@ app.post("/api/test", createMessage);
 app.delete("/api/test/:id", deleteMessage);
 
 var connectionString = 'mongodb://127.0.0.1:27017/test'; // for local
+
+console.log(process.env.MONGODB_URI);
 if(process.env.MONGODB_URI) { // check if running remotely
   connectionString = process.env.MONGODB_URI;
   console.log(connectionString);
