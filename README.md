@@ -8,7 +8,7 @@ This repo contains all of the assignments that were part of CS 5610 (summer-2 20
 
 ## links
 1. Find this repo(Assignments and Info) hosted [here](https://krishna-webdev-assignments.herokuapp.com/)
-2. Assignments repo [here](https://github.com/krishnavikasm/krishna-minnamareddy-webdev-assignments/assignments/master/assignments)
+2. Assignments repo [here](https://github.com/krishnavikasm/krishna-minnamareddy-webdev-assignments/tree/master/public/assignment)
 3. Find the project repo [here](https://github.com/krishnavikasm/krishna-minnamareddy-webdev-project)
 3. Find the project hosted [here](https://webdev-spring-2017-krishna.herokuapp.com/)
 
