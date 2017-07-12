@@ -1,0 +1,3 @@
+[submodule "public/newLook"]
+	path = public/newLook
+	url = https://github.com/BlackrockDigital/startbootstrap-one-page-wonder.git
