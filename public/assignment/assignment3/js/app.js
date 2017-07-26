@@ -3,7 +3,6 @@ var app = angular.module("WebAppMaker", ['ngRoute']);
 function setupRouting() {
   var Config = function($routeProvider) {
     $routeProvider
-      .when("/", { templateUrl: "views/user/login.view.client.html"})
       .when("/login", {
         templateUrl: "views/user/login.view.client.html",
         controller: "LoginController",
@@ -60,6 +59,10 @@ function setupRouting() {
       .when("/profile/:uid/website/:wid/page/:pid/widget/:wgid", {
         templateUrl: "views/user/widget-edit.view.client.html",
         controller: "WidgetController",
+        controllerAs: "model"
+      }).otherwise("/login", {
+        templateUrl: "views/user/login.view.client.html",
+        controller: "LoginController",
         controllerAs: "model"
       });
   };
