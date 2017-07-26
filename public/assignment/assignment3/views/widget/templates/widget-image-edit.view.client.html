@@ -3,14 +3,14 @@
         <form class="form-horizontal">
             <div class="form-group">
                 <label for="pagename">Name</label>
-                <input id="pagename" class="form-control" placeholder="Name" type="text" />
+                <input  ng-model="model.currentWidget.name" id="pagename" class="form-control" placeholder="Name" type="text" />
             </div>
             <div class="form-group">
                 <label for="text">Text</label>
                 <input ng-model="model.currentWidget.text" id="text" class="form-control" placeholder="text" type="text" />
             </div>
             <div class="form-group">
-                <label for="url">URL</label>
+                <label for="url" >URL</label>
                 <input id="url" ng-model="model.currentWidget.url" class="form-control" placeholder="URL" type="url" />
             </div>
             <div class="form-group">
@@ -18,7 +18,14 @@
                 <input id="width" ng-model="model.currentWidget.width" class="form-control" placeholder="width" type="number" />
             </div>
             <div class="form-group">
-                <a class="btn btn-block btn-danger" ngclick="model.deleteMove(model.currentWidget._id)">Delete</a>
+                <label for="upload">Upload</label>
+                <input id="upload" class="form-control" placeholder="No File Choosen" type="file" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-block btn-primary">Upload Image</button>
+            </div>
+            <div class="form-group">
+                <a class="btn btn-block btn-danger" ng-click="model.deleteMove(model.currentWidget._id)">Delete</a>
             </div>
         </form>
     </div>

@@ -13,8 +13,8 @@
                     </a>
                 </li>
                 <li class="nav navbar-right">
-                    <a ng-click="model.addWidget()" class="nav navbar-brand">
-                        <span class="glyphicon glyphicon-plus"></span>
+                    <a ng-click="model.saveWidget()" class="nav navbar-brand">
+                        <span class="glyphicon glyphicon-ok"></span>
                     </a>
                 </li>
             </ul>
@@ -44,13 +44,13 @@
                 <div class="list-group-item no-border">
                     <div ng-switch="model.currentWidget.widgetType">
                         <div ng-switch-when="HEADING">
-                            <ng-include src="'views/user/widget-heading-edit.view.client.html'">
+                            <ng-include src="'views/widget/templates/widget-heading-edit.view.client.html'">
                         </div>
                         <div ng-switch-when="IMAGE">
-                            <ng-include src="'views/user/widget-image-edit.view.client.html'">
+                            <ng-include src="'views/widget/templates/widget-image-edit.view.client.html'">
                         </div>
                         <div ng-switch-when="YOUTUBE">
-                            <ng-include src="'views/user/widget-youtube-edit.view.client.html'">
+                            <ng-include src="'views/widget/templates/widget-youtube-edit.view.client.html'">
                         </div>
                     </div>
 
