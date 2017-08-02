@@ -1,0 +1,22 @@
+<div class="container-fluid vertical-align">
+    <div class="row">
+        <form class="form-horizontal col-xs-12">
+            <h1 class="form-group">Login</h1>
+            <div class="form-group">
+                <input ng-model="model.user.username" class="form-control" placeholder="username" type="text" />
+                <span class="text-danger">{{ model.errorMessages.username }}</span>
+            </div>
+            <div class="form-group">
+                <input ng-model="model.user.password" class="form-control" placeholder="password" type="password" />
+                <span class="text-danger">{{ model.errorMessages.password }}</span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">{{ model.errorMessages.invalidUser }}</span>
+                <button ng-click="model.login()" class="form-control btn btn-primary btn-block" id="login">Login</a>
+            </div>
+            <div class="form-group">
+                <a class="form-control btn btn-success btn-block" id="register" ng-click="model.register()">Register</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <ul class="nav navbar-link col-xs-12">
+                <li>
+                    <a ng-click="model.toWebsitesList()" class="nav navbar-brand">
+                        <span class="glyphicon glyphicon-menu-left"></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav navbar-brand">
+                        <span>Pages</span>
+                    </a>
+                </li>
+                <li class="nav navbar-right">
+                    <a ng-click="model.toPageNew()" class="nav navbar-brand">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <ul class="nav navbar-default navbar-fixed-bottom col-xs-12">
+            <li class="nav navbar-right">
+                <a ng-click="model.toProfile()" class="nav navbar-brand">
+                    <span class="glyphicon glyphicon-user"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="list-group">
+                    <div ng-repeat="page in model.pages" class="list-group-item no-border">
+                        <a ng-click="model.toWidgetList(page._id)">{{ page.name }}</a>
+                        <a ng-click="model.toPageEdit(page._id)"><span class="glyphicon glyphicon-cog pull-right"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
