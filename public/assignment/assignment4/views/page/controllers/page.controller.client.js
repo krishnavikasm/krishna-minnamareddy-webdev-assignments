@@ -14,7 +14,6 @@ var PageController = function($scope, $routeParams, $http, $location) {
         if(response.data) {
           this1.currentPage = response.data;
         }
-        console.log(response.data);
       }
     });
   }).catch(function(error) {

@@ -45,7 +45,6 @@ var WidgetController = function($sce, $routeParams, $http, $location) {
   };
 
   this.toPageList = function() {
-    console.log('hello');
     $location.path("/profile/"+userId+"/website/"+websiteId+"/page");
   };
 
