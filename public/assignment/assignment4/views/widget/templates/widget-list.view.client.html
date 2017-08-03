@@ -40,8 +40,8 @@
 
     <div class="container-fluid">
         <div class="col-xs-12">
-            <div class="list-group">
-                <div class="list-group-item no-border" ng-repeat="widget in model.widgets">
+            <ul wbdv-sortable class="list-group">
+                <li ng-mousedown="model.active(widget._id)" class="list-group-item no-border" ng-repeat="widget in model.widgets">
                     <div ng-switch="widget.widgetType">
                         <div ng-switch-when="HEADING">
                             <ng-include src="'views/widget/templates/widget-heading.view.client.html'">

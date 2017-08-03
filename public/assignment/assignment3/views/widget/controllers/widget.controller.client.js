@@ -28,9 +28,10 @@ var WidgetController = function($scope, $routeParams, WidgetService, $location, 
   };
 
   this.widgetList = function() {
-    $location.path("/profile/"+userId+"/website/"+websiteId+"/page/"+pageId+"/widget");
+    $location.path("/profile/"+userId+"/website/"+
+                   websiteId+"/page/"+pageId+"/widget");
   };
-  
+
   this.goToWidgetHeading = function() {
     this.currentWidget = {
       "_id": Date().toString(),
@@ -53,7 +54,7 @@ var WidgetController = function($scope, $routeParams, WidgetService, $location, 
     };
     WidgetService.createWidget(pageId, this.currentWidget); $location.path("/profile/"+userId+"/website/"+websiteId+"/page/"+pageId+"/widget/"+this.currentWidget._id);
   };
-  
+
   this.deleteMove = function(wgid) {
     console.log('hello');
     WidgetService.deleteWidget(wgid);

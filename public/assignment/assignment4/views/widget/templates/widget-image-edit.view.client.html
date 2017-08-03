@@ -1,6 +1,5 @@
 <div class="container-fluid">
     <div class="col-xs-12">
-        <form class="form-horizontal">
             <div class="form-group">
                 <label for="pagename">Name</label>
                 <input  ng-model="model.currentWidget.name" id="pagename" class="form-control" placeholder="Name" type="text" />
@@ -17,17 +16,24 @@
                 <label for="width">Width</label>
                 <input id="width" ng-model="model.currentWidget.width" class="form-control" placeholder="width" type="number" />
             </div>
+            <form action="/api/upload" method="post" enctype="multipart/form-data">
+                <input name="width" value="{{model.currentWidget.width}}" type="hidden" />
+                <input name="userId" value="{{model.currentWidget.userId}}" type="hidden" />
+                <input name="websiteId" value="{{model.currentWidget.websiteId}}" type="hidden"/>
+                <input name="pageId" value="{{model.currentWidget.pageId}}" type="hidden"/>
+                <input name="widgetId" value="{{model.currentWidget._id}}" type="hidden"/>
+                <input name="callback" value="{{model.callback}}" type="hidden" />
             <div class="form-group">
                 <label for="upload">Upload</label>
-                <input id="upload" class="form-control" placeholder="No File Choosen" type="file" />
+                <input id="upload" name="upload" class="form-control" placeholder="No File Choosen" type="file" />
             </div>
             <div class="form-group">
-                <button class="btn btn-block btn-primary">Upload Image</button>
+                <button type="submit" class="btn btn-block btn-primary">Upload Image</button>
             </div>
+            </form>
             <div class="form-group">
                 <a class="btn btn-block btn-danger" ng-click="model.deleteMove(model.currentWidget._id)">Delete</a>
             </div>
-        </form>
     </div>
 </div>
 </div>

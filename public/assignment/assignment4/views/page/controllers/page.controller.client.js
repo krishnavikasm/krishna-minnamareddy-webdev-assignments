@@ -6,7 +6,6 @@ var PageController = function($scope, $routeParams, $http, $location) {
   var this1 = this;
   $http.get("/api/website/"+websiteId+"/page").then(function(response) {
     if(response.status == 200) {
-      console.log(response.data);
       this1.pages = response.data;
     }
   }).then(function() {

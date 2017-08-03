@@ -5,7 +5,9 @@
             <span class="glyphicon glyphicon-align-justify"></span>
         </span>
         <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src={{widget.url}}></iframe>
+            <iframe class="embed-responsive-item"
+                    src="{{model.getURL(widget)}}">
+            </iframe>
         </div>
         <h1 class="text=primary">
             {{widget.text}}

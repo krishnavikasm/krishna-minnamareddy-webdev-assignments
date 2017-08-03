@@ -1,5 +1,12 @@
 var app = angular.module("WebAppMaker", ['ngRoute']);
 
+app.directive("wbdvSortable", function() {
+  return {
+    controller: "WidgetController",
+    controllerAs: "model",
+    link: sortable,
+  };
+});
 function setupRouting() {
   var Config = function($routeProvider) {
     $routeProvider

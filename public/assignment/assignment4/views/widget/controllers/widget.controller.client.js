@@ -1,16 +1,27 @@
-var WidgetController = function($scope, $routeParams, $http, $location, PageService) {
+var WidgetController = function($sce, $routeParams, $http, $location) {
+
   var userId = $routeParams.uid;
   var websiteId = $routeParams.wid;
   var pageId = $routeParams.pid;
   var widgetId = $routeParams.wgid;
   var this1 = this;
-  
+
+  this.callback = window.location.pathname + "#!/profile/"
+    +userId+"/website/"+websiteId+"/page/"+pageId+"/widget";
+  if(!this.currentWidget) {
+    this.currentWidget = {};
+  }
+
+  this.currentWidget.userId = userId;
+  this.currentWidget.websiteId = websiteId;
+  this.currentWidget.pageId = pageId;
+
+
   $http.get("/api/page/"+pageId+"/widget")
     .then(function(response) {
       if(response.status == 200) {
-        this1.widgets = response.body;
-      }
-    })
+        this1.widgets = response.data;
+      }})
     .catch(function(error) {
       this1.errorMessage = "Something went wrong";
     });
@@ -18,18 +29,23 @@ var WidgetController = function($scope, $routeParams, $http, $location, PageServ
   $http.get("/api/widget/"+widgetId)
     .then(function(response) {
       if(response.status == 200) {
-        this1.currentWidget = response.body;
+        this1.currentWidget = response.data;
       }
     })
     .catch(function(error) {
       this1.errorMessage = "Something went wrong";
     });
 
+  this.getURL = function(widget) {
+    return $sce.trustAsResourceUrl(widget.url);
+  };
+
   this.toProfile = function() {
     $location.path("/profile/"+userId);
   };
 
   this.toPageList = function() {
+    console.log('hello');
     $location.path("/profile/"+userId+"/website/"+websiteId+"/page");
   };
 
@@ -55,17 +71,39 @@ var WidgetController = function($scope, $routeParams, $http, $location, PageServ
       });
   };
 
+  this.active = function(id) {
+    this.moveId = id;
+  };
+
+  this.updateIndex = function(initial, final) {
+    $http.put("/page/"+pageId+"/widget?initial="+initial+"&final="+final)
+      .then(function(response) {
+        if(response.status == 200) {
+        } else {
+          throw "Error";
+        }
+      })
+      .catch(function(error) {
+        this.errorMessage = "Something went wrong";
+      });
+  };
+
   this.widgetList = function() {
     $location.path("/profile/"+userId+"/website/"
                    +websiteId+"/page/"+pageId+"/widget");
   };
 
-  var createAndRedirect = function() {
+  var createAndRedirect = function(widgetType) {
+    var newWidgetId = Date().toString();
+    this.currentWidget = {
+      "_id": newWidgetId,
+      widgetType
+    };
     $http.post("/api/page/"+pageId+"/widget", this.currentWidget)
       .then(function(response) {
         if(response.status == 200) {
           $location.path("/profile/"+userId+"/website/"+websiteId+
-                         "/page/"+pageId+"/widget/"+this.currentWidget._id);
+                         "/page/"+pageId+"/widget/"+newWidgetId);
         }
       })
       .catch(function(error) {
@@ -74,31 +112,24 @@ var WidgetController = function($scope, $routeParams, $http, $location, PageServ
   };
 
   this.goToWidgetHeading = function() {
-    this.currentWidget = {
-      "_id": Date().toString(),
-      widgetType: "HEADING",
-    };
-    createAndRedirect();
+    createAndRedirect("HEADING");
   };
 
   this.goToWidgetImage = function() {
-    this.currentWidget = {
-      "_id": Date().toString(),
-      widgetType: "IMAGE",
-    };
-    createAndRedirect();
+    createAndRedirect("IMAGE");
   };
   this.goToWidgetYoutube = function() {
-    this.currentWidget = {
-      "_id": Date().toString(),
-      widgetType: "YOUTUBE",
-    };
-    createAndRedirect();
+    createAndRedirect("YOUTUBE");
   };
 
   this.deleteMove = function(wgid) {
-    console.log('hello');
-    WidgetService.deleteWidget(wgid);
-    this.toPageList();
+    $http.delete("/api/widget/"+wgid)
+      .then(function(response) {
+        if(response.status == 200) {
+            this1.widgetList();
+          }})
+      .catch(function(error) {
+        this1.errorMessage = "Some thing went wrong, Please try again later";
+      });
   };
 };
