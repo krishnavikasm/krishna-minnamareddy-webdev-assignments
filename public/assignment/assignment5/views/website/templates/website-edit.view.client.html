@@ -1,0 +1,78 @@
+
+<div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <ul class="nav navbar-link col-md-4 hidden-xs hidden-sm">
+                <li>
+                    <a ng-click="model.toWebsitesList()" class="nav navbar-brand">
+                        <span class="glyphicon glyphicon-menu-left"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="nav navbar-brand">
+                        <span>Websites</span>
+                    </a>
+                </li>
+                <li class="nav navbar-right">
+                    <a ng-click="model.toWebsiteNew()" class="nav navbar-brand">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-link col-xs-12 col-md-8">
+                <li class="visible-xs-* visible-sm-* hidden-md hidden-lg">
+                    <a ng-click="model.toWebsitesList()" class="nav navbar-brand">
+                        <span class="glyphicon glyphicon-menu-left"></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav navbar-brand">
+                        <span>Edit Website</span>
+                    </a>
+                </li>
+                <li class="nav navbar-right">
+                    <a ng-click="model.saveAndMove()" class="nav navbar-brand">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <ul class="nav navbar-default navbar-fixed-bottom col-xs-12">
+            <li class="nav navbar-right">
+                <a ng-click="model.toProfile()" class="nav navbar-brand">
+                    <span class="glyphicon glyphicon-user"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 hidden-xs hidden-sm">
+                <div class="list-group-border">
+                    <div class="list-group">
+                        <div class="list-group-item" ng-repeat="website in model.websites">
+                            <a ng-click="model.toPage(website._id)">{{website.name}}</a>
+                            <a ng-click="model.toWebsiteEdit(website._id)"><span class="glyphicon glyphicon-cog pull-right"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <form class="form-horizontal col-xs-12">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input ng-model="model.currentWebsite.name" id="name" class="form-control" placeholder="name" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Description</label>
+                        <textarea ng-model="model.currentWebsite.description" rows="3" id="description" class="form-control" placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-block btn-danger" ng-click="model.deleteWebsite()">Delete</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

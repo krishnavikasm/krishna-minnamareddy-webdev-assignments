@@ -1,0 +1,21 @@
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="pagename">Name</label>
+                <input ng-model="model.currentWidget.name" id="pagename" class="form-control" placeholder="Name" type="text" />
+            </div>
+            <div class="form-group">
+                <label for="text">Text</label>
+                <input ng-model="model.currentWidget.text" id="text" class="form-control" placeholder="text" type="text" />
+            </div>
+            <div class="form-group">
+                <label for="size">Size</label>
+                <input ng-model="model.currentWidget.size" id="size" class="form-control" placeholder="size" type="number" />
+            </div>
+            <div class="form-group">
+                <a class="btn btn-block btn-danger" ng-click="model.deleteMove(model.currentWidget._id)">Delete</a>
+            </div>
+        </form>
+    </div>
+</div>

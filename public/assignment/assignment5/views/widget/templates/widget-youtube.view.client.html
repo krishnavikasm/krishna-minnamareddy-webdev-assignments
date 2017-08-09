@@ -1,0 +1,16 @@
+<div class="media">
+    <div class="media-body">
+        <span class="overlay-icons">
+            <a ng-click="model.widgetEdit(widget._id)" class="glyphicon glyphicon-cog text-primary"></a>
+            <span class="glyphicon glyphicon-align-justify"></span>
+        </span>
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item"
+                    src="{{model.getURL(widget)}}">
+            </iframe>
+        </div>
+        <h1 class="text=primary">
+            {{widget.text}}
+        </h1>
+    </div>
+</div>
