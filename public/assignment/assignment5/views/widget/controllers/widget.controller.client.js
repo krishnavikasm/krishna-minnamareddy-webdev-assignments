@@ -1,4 +1,5 @@
-var WidgetController = function($sce, $routeParams, $http, $location) {
+var WidgetController = function($sce, $routeParams, $http,
+                                $location) {
 
   var userId = $routeParams.uid;
   var websiteId = $routeParams.wid;
@@ -26,15 +27,17 @@ var WidgetController = function($sce, $routeParams, $http, $location) {
       this1.errorMessage = "Something went wrong";
     });
 
-  $http.get("/api/widget/"+widgetId)
-    .then(function(response) {
-      if(response.status == 200) {
-        this1.currentWidget = response.data;
-      }
-    })
-    .catch(function(error) {
-      this1.errorMessage = "Something went wrong";
-    });
+  if (widgetId) {
+    $http.get("/api/widget/"+widgetId)
+      .then(function(response) {
+        if(response.status == 200) {
+          this1.currentWidget = response.data;
+        }
+      })
+      .catch(function(error) {
+        this1.errorMessage = "Something went wrong";
+      });
+  }
 
   this.getURL = function(widget) {
     return $sce.trustAsResourceUrl(widget.url);
@@ -93,19 +96,20 @@ var WidgetController = function($sce, $routeParams, $http, $location) {
   };
 
   var createAndRedirect = function(widgetType) {
-    var newWidgetId = Date().toString();
     this.currentWidget = {
-      "_id": newWidgetId,
-      widgetType
+      type: widgetType
     };
     $http.post("/api/page/"+pageId+"/widget", this.currentWidget)
       .then(function(response) {
         if(response.status == 200) {
+          var newWidgetId = response.data._id;
+          this1.currentWidget = response.data;
           $location.path("/profile/"+userId+"/website/"+websiteId+
                          "/page/"+pageId+"/widget/"+newWidgetId);
         }
       })
       .catch(function(error) {
+        console.log(error);
         this1.errorMessage = "Something went wrong";
       });
   };
@@ -120,6 +124,9 @@ var WidgetController = function($sce, $routeParams, $http, $location) {
   this.goToWidgetYoutube = function() {
     createAndRedirect("YOUTUBE");
   };
+  this.goToWidgetText = function() {
+    createAndRedirect("TEXT");
+  };
 
   this.deleteMove = function(wgid) {
     $http.delete("/api/widget/"+wgid)
@@ -129,6 +136,52 @@ var WidgetController = function($sce, $routeParams, $http, $location) {
           }})
       .catch(function(error) {
         this1.errorMessage = "Some thing went wrong, Please try again later";
+      });
+  };
+
+  var key = "8fea3135a9dea02bf494b127599c1f4b";
+  var secret = "d27c428d19717826";
+  var urlBase = "https://api.flickr.com/services/rest/?method=flickr.photos.search&format=json&api_key=8fea3135a9dea02bf494b127599c1f4b&text=";
+
+  function searchPhotos(searchTerm) {
+    var url = urlBase+searchTerm;
+    return $http.get(url);
+  }
+
+  this.searchPhotos = function(searchTerm) {
+    searchPhotos(searchTerm)
+      .then(function(response) {
+        var data = response.data.replace("jsonFlickrApi(","");
+        data = data.substring(0,data.length - 1);
+        data = JSON.parse(data);
+        this1.photos = data.photos.photo;
+      });
+  };
+
+  this.selectPhoto = function(photo) {
+    var url = "https://farm" + photo.farm + ".staticflickr.com/" + photo.server;
+    url += "/" + photo.id + "_" + photo.secret + "_b.jpg";
+    this.currentWidget = {
+      type: 'IMAGE',
+      url
+    };
+   this.saveWidget();
+  };
+  this.goToWidgetFlickerSearch = function() {
+    this.currentWidget = {
+      type: 'IMAGE',
+    };
+    $http.post("/api/page/"+pageId+"/widget", this.currentWidget)
+      .then(function(response) {
+        if(response.status == 200) {
+          var newWidgetId = response.data._id;
+          this1.currentWidget = response.data;
+          $location.path("/profile/"+userId+"/website/"+websiteId+
+                         "/page/"+pageId+"/widget/"+newWidgetId+'/search');
+        }
+      })
+      .catch(function(error) {
+        this1.errorMessage = "Something went wrong";
       });
   };
 };

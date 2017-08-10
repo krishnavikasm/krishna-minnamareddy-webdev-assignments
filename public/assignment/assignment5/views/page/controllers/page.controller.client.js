@@ -9,13 +9,15 @@ var PageController = function($scope, $routeParams, $http, $location) {
       this1.pages = response.data;
     }
   }).then(function() {
-    $http.get("/api/page/"+pageId).then(function(response) {
-      if(response.status == 200) {
-        if(response.data) {
-          this1.currentPage = response.data;
+    if(pageId) {
+      $http.get("/api/page/"+pageId).then(function(response) {
+        if(response.status == 200) {
+          if(response.data) {
+            this1.currentPage = response.data;
+          }
         }
-      }
-    });
+      });
+    }
   }).catch(function(error) {
     this1.errorMessage = "Something went wrong";
   });
@@ -40,7 +42,6 @@ var PageController = function($scope, $routeParams, $http, $location) {
   };
 
   this.saveAndMove = function() {
-    this.currentPage._id = Date().toString();
     $http.post("/api/website/"+websiteId+"/page", this.currentPage)
       .then(function(response) {
         if(response.status == 200) {
@@ -50,6 +51,16 @@ var PageController = function($scope, $routeParams, $http, $location) {
       .catch(function(error) {
         this1.errorMessage = "Please try again later";
       });
+  };
+
+  this.updateAndMove = function() {
+    $http.put("/api/page/"+pageId, this.currentPage)
+    .then(function(response) {
+      this1.toPageList();
+    })
+    .catch(function(error) {
+      this1.errorMessage = "Please try again later";
+    });
   };
 
   this.deleteAndMove = function() {

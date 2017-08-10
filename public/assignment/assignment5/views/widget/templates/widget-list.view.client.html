@@ -42,7 +42,7 @@
         <div class="col-xs-12">
             <ul wbdv-sortable class="list-group">
                 <li ng-mousedown="model.active(widget._id)" class="list-group-item no-border" ng-repeat="widget in model.widgets">
-                    <div ng-switch="widget.widgetType">
+                    <div ng-switch="widget.type">
                         <div ng-switch-when="HEADING">
                             <ng-include src="'views/widget/templates/widget-heading.view.client.html'">
                         </div>
@@ -51,6 +51,16 @@
                         </div>
                         <div ng-switch-when="YOUTUBE">
                             <ng-include src="'views/widget/templates/widget-youtube.view.client.html'">
+                        </div>
+                        <div ng-switch-when="TEXT">
+                            <div ng-if="widget.formatted" text-angular ta-toolbar="[['h1','h2','h3'],['bold','italics','underline','strikeThrough'],
+                                        ['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull'],
+                                        ['indent','outdent'],['html']]"></div>
+                            <input ng-if="!widget.formatted && (!widget.rows || widget.rows===1)"
+                                   placeholder="{{widget.textInput.placeholder}}" class="form-control"/>
+                            <textarea ng-if="!widget.formatted && (widget.rows > 1)"
+                                      rows="{{widget.rows}}" placeholder="{{widget.placeholder}}"
+                                      class="form-control">{{widget.text}}</textarea>
                         </div>
                     </div>
                 </div>

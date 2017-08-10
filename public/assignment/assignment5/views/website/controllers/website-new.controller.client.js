@@ -27,7 +27,6 @@ var WebsiteNewController = function($scope, $routeParams, $http, $location) {
   };
 
   this.newWebsite = function() {
-    this.currentWebsite._id = Date().toString();
     $http.post("/api/user/"+userId+"/website", this.currentWebsite)
       .then(function(response) {
         if(response.status == 200) {

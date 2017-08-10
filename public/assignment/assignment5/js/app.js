@@ -1,4 +1,4 @@
-var app = angular.module("WebAppMaker", ['ngRoute']);
+var app = angular.module("WebAppMaker", ['ngRoute', 'textAngular']);
 
 app.directive("wbdvSortable", function() {
   return {
@@ -71,6 +71,11 @@ function setupRouting() {
       })
       .when("/profile/:uid/website/:wid/page/:pid/widget/new", {
         templateUrl: "views/widget/templates/widget-chooser.view.client.html",
+        controller: "WidgetController",
+        controllerAs: "model"
+      })
+      .when("/profile/:uid/website/:wid/page/:pid/widget/:wgid/search", {
+        templateUrl: "views/widget/templates/widget-flickr.search.view.html",
         controller: "WidgetController",
         controllerAs: "model"
       })

@@ -42,7 +42,7 @@
         <div class="col-xs-12">
             <div class="list-group">
                 <div class="list-group-item no-border">
-                    <div ng-switch="model.currentWidget.widgetType">
+                    <div ng-switch="model.currentWidget.type">
                         <div ng-switch-when="HEADING">
                             <ng-include src="'views/widget/templates/widget-heading-edit.view.client.html'">
                         </div>
@@ -51,6 +51,16 @@
                         </div>
                         <div ng-switch-when="YOUTUBE">
                             <ng-include src="'views/widget/templates/widget-youtube-edit.view.client.html'">
+                        </div>
+                        <div ng-switch-when="TEXT">
+                            Text
+                            <input ng-model="model.currentWidget.text" class="form-control"/>
+                            Rows
+                            <input ng-model="model.currentWidget.rows" class="form-control" type="number"/>
+                            Placeholder
+                            <input ng-model="model.currentWidget.placeholder" class="form-control"/>
+                            Formatted
+                            <input ng-model="model.currentWidget.formatted" type="checkbox"/>
                         </div>
                     </div>
 

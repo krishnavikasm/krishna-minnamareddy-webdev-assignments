@@ -20,7 +20,6 @@ var RegisterController = function($scope, $routeParams, $location, $http) {
       alert("Passwords should match");
       return ;
     }
-    this.currentUser._id = Date().toString(),
     $http.post("/api/user", this.currentUser).then(function(response) {
       if (response.status == 200) {
         $location.path("/profile/"+this.currentUser._id);

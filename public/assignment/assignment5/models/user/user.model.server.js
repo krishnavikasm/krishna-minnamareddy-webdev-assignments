@@ -1,5 +1,5 @@
 var { mongoose } = require('../models.server.js');
-var { User } = require('user.schema.server.js');
+var { User } = require('./user.schema.server.js');
 
 
 var UserModel = mongoose.model('User', User);
@@ -15,7 +15,7 @@ var createUser = function(user) {
 };
 
 var findUserById = function(userId) {
-  return UserModel.findOne({ "_id": userId })
+   return UserModel.findOne({ "_id": userId })
     .exec(function (err, user) {
       if (err) {
         return {status: false, error: err};
@@ -48,32 +48,19 @@ var findUserByCredentials = function(username, password) {
 };
 
 var updateUser = function(userId, user) {
+  console.log(user);
   return UserModel.findOneAndUpdate(
-    {"_id": userId},
-    user,
-    {new: true},
-    function(newUser) {
-      if (newUser) {
-        return { status: true, user: newUser};
-      } else {
-        return { status: false };
-      }
-    });
+    {"_id": userId}, user);
 };
+
 var deleteUser = function(userId) {
   return UserModel.findOneAndRemove(
-    {"_id": userId},
-    {}, function(error) {
-      if (error) {
-        return { status: false, error: error };
-      } else {
-        return { status: true };
-      }
-    });
+    {"_id": userId});
 };
 
 
-module.export = {
+module.exports = {
+  UserModel,
   createUser,
   findUserById,
   findUserByUsername,

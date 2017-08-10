@@ -1,70 +1,50 @@
 var { mongoose } = require('../models.server.js');
-var { Widget } = require('widget.schema.server.js');
-
+var { Widget } = require('./widget.schema.server.js');
+var { findPageById, updatePage } = require('../page/page.model.server.js');
+var { reorderWidget, findPageById } = require('./../page/page.model.server.js');
 
 var WidgetModel = mongoose.model('Widget', Widget);
 
 
 var createWidget = function (pageId, widget) {
   widget._page = pageId;
-  var newWidget = new WidgetModel(widget);
-  return newWidget.save(function(error) {
+  return WidgetModel.create(widget, function(error, newWidget) {
     if (error) {
       return { status: false, error };
     } else {
-      return { status: true };
+      findPageById(pageId).then(
+        function (response) {
+          console.log(response);
+          if (response) {
+            var widgetsList = response.widgets;
+            widgetsList.push(newWidget._id);
+            updatePage(pageId, { widgets: widgetsList })
+              .then(function(response) {
+              });
+          }
+        }
+      );
     }
   });
 };
 
+
 var findAllWigetsForPage = function(pageId) {
-  return WidgetModel.find({ _page: pageId})
-    .exec(function (error, widgets) {
-      if (error) {
-        return { status: false, error };
-      } else {
-        return { status: true, widgets };
-      }
-    });
+  return findPageById(pageId).populate('widgets');
 };
 
 var findWidgetById = function(widgetId) {
-  return WidgetModel.find({_id: widgetId})
-    .exec(function (error, widget) {
-      if (error) {
-        return { status: false, error };
-      } else {
-        return { status: true, widget };
-      }
-    });
+  return WidgetModel.findOne({_id: widgetId});
 };
 
 var updateWidget = function(widgetId, widget) {
   return WidgetModel.findOneAndUpdate(
     {_id: widgetId},
-    widget,
-    { new: true },
-    function (newWidget) {
-      if (newWidget) {
-        return { status: true, widget: newWidget };
-      } else {
-        return { status: false };
-      }
-    }
-  );
+    widget);
 };
 
 var deleteWidget = function(widgetId) {
-  return WidgetModel.findOneAndRemove(
-    {_id: widgetId},
-    {}, function (error) {
-      if (error) {
-        return { status: false, error };
-      } else {
-        return { status: true };
-      }
-    }
-  );
+  return WidgetModel.findOneAndRemove({_id: widgetId});
 };
 
 
@@ -73,5 +53,6 @@ module.exports = {
   findAllWigetsForPage,
   findWidgetById,
   updateWidget,
-  deleteWidget
+  deleteWidget,
+  reorderWidget,
 };

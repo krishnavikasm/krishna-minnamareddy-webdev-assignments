@@ -1,17 +1,24 @@
 var { mongoose } = require('../models.server.js');
-var { Page } = require('page.schema.server.js');
+var { Page } = require('./page.schema.server.js');
+var { findWebsitesById, updateWebsite } = require('../website/website.model.server.js');
 
 
 var PageModel = mongoose.model('Page', Page);
 
 var createPage = function(websiteId, page){
   page._website = websiteId;
-  var newPage = new PageModel(page);
-  return newPage.save(function(err) {
+  return PageModel.create(page, function(err, newPage) {
     if(err) {
       return { status: false , error: err};
     } else {
-      return { status: true };
+      findWebsitesById(websiteId)
+        .then(function (response) {
+          if (response) {
+            var pagesList = response.pages;
+            pagesList.push(newPage._id);
+            updateWebsite(websiteId, { pages: pagesList});
+          }
+        });
     }
   });
 };
@@ -28,56 +35,22 @@ var findAllPagesForWebsites = function(websiteId) {
 };
 
 var findPageById = function(pageId) {
-  return PageModel.find({_id: pageId})
-    .exec(function(error, page) {
-      if (error) {
-        return { status: false, error };
-      } else {
-        return { status: true, page };
-      }
-    });
+  return PageModel.findOne({_id: pageId});
 };
 
 var updatePage = function(pageId, page) {
-  return PageModel.findOneAndUpdate(
-    {_id: pageId},
-    page,
-    {new: true},
-    function(newPage) {
-      if (newPage) {
-        return { status: true, newPage };
-      } else {
-        return { status: false };
-      }
-    }
-  );
+  return PageModel.findOneAndUpdate({ _id: pageId }, page);
 };
 
 var deletePage = function(pageId) {
-  return PageModel.findOneAndRemove(
-    {_id: pageId},
-    {},
-    function(error) {
-      if (error) {
-        return { status: false, error };
-      } else {
-        return { status: true };
-      }
-    }
-  );
+  return PageModel.findOneAndRemove({ _id: pageId});
 };
 
 
 var changeOrder = function(widgets, pageId, initial, final) {
   var newArray = [];
-  var nonPageIdWidget = widgets.filter(function(widget) {
-    return widget.pageId != pageId;
-  });
-  var pageIdWidgets = widgets.filter(function(widget){
-    return widget.pageId == pageId;
-  });
-  var elem = pageIdWidgets[initial];
-  pageIdWidgets.forEach(function(widget, index) {
+  var elem = widgets[initial];
+  widgets.forEach(function(widget, index) {
     if (index != final && index != initial) {
       newArray = newArray.concat(widget);
     }
@@ -91,32 +64,23 @@ var changeOrder = function(widgets, pageId, initial, final) {
       }
     }
   });
-  return nonPageIdWidget.concat(newArray);
+  return newArray;
 };
 
 var reorderWidget = function(pageId, start, end) {
-  return PageModel.find({_id: pageId})
+  return PageModel.findOne({_id: pageId}).populate('widgets')
     .exec(function(error, page) {
       if (error) {
         return { status: false, error };
       } else {
         var widgets = page.widgets;
         var newWidgets = changeOrder(widgets, pageId, start, end);
-        return PageModel.findOneAndUpdate(
-          {_id: pageId},
-          {widgets},
-          { new: true },
-          function (newPage){
-            if (newPage) {
-              return { status: true, page: newPage };
-            } else {
-              return { status: false };
-            }
-          }
-        );
+        return PageModel.findOneAndUpdate({_id: pageId}, {widgets: newWidgets})
+          .then(function(response) {});
       }
     });
 };
+
 module.exports = {
   createPage,
   findAllPagesForWebsites,

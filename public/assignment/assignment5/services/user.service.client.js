@@ -1,53 +1,8 @@
-var users = [
-  {_id: "123", username: "alice",    password: "alice",    firstName: "Alice",  lastName: "Wonder"  },
-  {_id: "234", username: "bob",      password: "bob",      firstName: "Bob",    lastName: "Marley"  },
-  {_id: "345", username: "charly",   password: "charly",   firstName: "Charly", lastName: "Garcia"  },
-  {_id: "456", username: "jannunzi", password: "jannunzi", firstName: "Jose",   lastName: "Annunzi" }
-];
 
-var createUser = function(user) {
-  return users.push(user);
-};
+var { createUser, findUserById, findUserByUsername,
+      findUserByCredentials, updateUser, deleteUser } = require('./../models/user/user.model.server.js');
 
-var findUserById = function(userId) {
-  return users.find(function(user) {
-    return user._id == userId;
-  });
-};
 
-var findUserByUsername = function(username) {
-  return users.filter(function(user) {
-    return user.username == username;
-  });
-};
-
-var findUserByCredentials = function(username, password) {
-  return users.find(function(user) {
-    return user.username == username && user.password == password;
-  });
-};
-
-var updateUser = function(userId, user) {
-  var index = users.findIndex(function(currentUser) {
-    return currentUser._id == userId;
-  });
-  if (index < 0) {
-    return users;
-  }
-  users[index] = user;
-  return users;
-};
-
-var deleteUser = function(userId) {
-  var index = users.findIndex(function(currentUser) {
-    return currentUser._id == userId;
-  });
-  if (index < 0) {
-    return users;
-  }
-  users.splice(index, 1);
-  return users;
-};
 
 var api = {
   createUser,
@@ -61,29 +16,53 @@ var api = {
 var UserService = function(app) {
   app.get('/api/user', function (req, res) {
     if (req.query.username && req.query.password) {
-      res.send(findUserByCredentials(req.query.username, req.query.password));
+      findUserByCredentials(req.query.username, req.query.password)
+        .then(function (response) {
+          res.send(response);
+        }).catch(function(error) {
+          res.status(500).send({ error: 'Something failed!' });
+        });
     } else if(req.query.username) {
-      res.send(findUserByUsername(req.query.username));
+      findUserByUsername(req.query.username)
+        .then(function(response) {
+        res.send(response);
+      }).catch(function(error) {
+        res.status(500).send({ error: 'Something failed!' });
+      });
     }
   });
 
   app.get('/api/user/:userId', function (req, res) {
-    res.send(findUserById(req.params.userId));
+    findUserById(req.params.userId)
+    .then(function(response) {
+      res.send(response);
+    }).catch(function(error) {
+      res.status(500).send({ error: 'Something failed!' });
+    });
   });
 
   app.post('/api/user', function(req, res) {
-    createUser(req.body);
-    res.send(true);
+    createUser(req.body).then(function(response) {
+      res.send(true);
+    }).catch(function(error) {
+      res.status(500).send({ error: 'Something failed!' });
+    });
   });
 
   app.put('/api/user/:userId', function (req, res) {
-    updateUser(req.params.userId, req.body);
-    res.send(true);
+    updateUser(req.params.userId, req.body).then(function(response) {
+      res.send(true);
+    }).catch(function(error) {
+      res.status(500).send({ error: 'Something failed!' });
+    });
   });
 
   app.delete('/api/user/:userId', function (req, res) {
-    deleteUser(req.params.userId);
-    res.send(true);
+    deleteUser(req.params.userId).then(function(response) {
+      res.send(true);
+    }).catch(function(error) {
+      res.status(500).send({ error: 'Something failed!' });
+    });
   });
 
 };

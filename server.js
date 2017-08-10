@@ -9,8 +9,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(__dirname + '/public'));
 
-var assignment4 = require("./public/assignment/assignment4/app.js");
-assignment4(app);
+var assignment5 = require("./public/assignment/assignment5/app.js");
+assignment5(app);
 
 
 app.listen(app.get('port'));
