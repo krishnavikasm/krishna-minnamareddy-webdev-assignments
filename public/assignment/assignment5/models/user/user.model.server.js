@@ -58,7 +58,6 @@ var deleteUser = function(userId) {
     {"_id": userId});
 };
 
-
 module.exports = {
   UserModel,
   createUser,
